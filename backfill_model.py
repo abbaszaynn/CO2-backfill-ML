@@ -68,18 +68,21 @@ MIN_TIME_SCALE_MIN = 5      # the GP may not wiggle faster than about 5 minutes 
 MIN_NOISE = 0.05            # treats small jumps between neighbouring times as lab scatter, not signal
 
 class GP:
-    # Gaussian process; trend=True adds the U-shaped trend first; kernel= reuses fitted settings
-    def __init__(self, target, trend=False, kernel=None): self.target, self.trend, self.kernel = target, trend, kernel
+    # Gaussian process; trend=True adds the U-shaped trend first; kernel= reuses fitted settings;
+    # min_time_scale (min) and min_noise override the smoothness settings above (used in paper/compare_gp_settings.py)
+    def __init__(self, target, trend=False, kernel=None, min_time_scale=MIN_TIME_SCALE_MIN, min_noise=MIN_NOISE):
+        self.target, self.trend, self.kernel = target, trend, kernel
+        self.min_time_scale, self.min_noise = min_time_scale, min_noise
     def fit(self, d):
         y = d[self.target].values
         self.lr = LinearRegression().fit(trend_of(d), y) if self.trend else None
         r = y - (self.lr.predict(trend_of(d)) if self.trend else 0)
         self.sc = StandardScaler().fit(r.reshape(-1, 1))
-        bounds = [(MIN_TIME_SCALE_MIN / 20, 1e3)] + [(5e-2, 1e3)] * 4
+        bounds = [(self.min_time_scale / 20, 1e3)] + [(5e-2, 1e3)] * 4
         kernel = self.kernel if self.kernel is not None else ConstantKernel(1.0, (1e-2, 1e1)) * Matern(np.ones(5), nu=2.5, length_scale_bounds=bounds) \
-                 + WhiteKernel(MIN_NOISE, (MIN_NOISE, 1.0))
+                 + WhiteKernel(self.min_noise, (self.min_noise, 1.0))
         self.gp = GaussianProcessRegressor(kernel, n_restarts_optimizer=0, random_state=0,
-                                           optimizer=None if self.kernel else "fmin_l_bfgs_b")
+                                           optimizer=None if self.kernel is not None else "fmin_l_bfgs_b")
         self.gp.fit(X_of(d), self.sc.transform(r.reshape(-1, 1)).ravel()); return self
     def predict(self, d, return_std=False):
         m, s = self.gp.predict(X_of(d), return_std=True)
@@ -160,13 +163,13 @@ def predict_band(gp, d):
     mu, sd = gp.predict(d, return_std=True)
     return mu, mu - 1.96 * sd, mu + 1.96 * sd
 
-def curve_and_optimum(gp, mix, best="min", n_draws=2000, seed=42):
+def curve_and_optimum(gp, mix, best="min", n_draws=2000, rng=42):
     """Mean curve with 95% band over GRID, and the optimum time from n_draws posterior curves
-    (same method as notebook section 7)."""
+    (same method as notebook section 7). rng is a seed or a numpy Generator shared between calls."""
     Xg = pd.DataFrame({"co2_time_min": GRID, **mix})
     mean_s, cov_s = gp.gp.predict(X_of(Xg), return_cov=True)
-    s, trend = gp.sc.scale_[0], gp.lr.predict(trend_of(Xg))
-    draws = np.random.default_rng(seed).multivariate_normal(mean_s, cov_s + 1e-9 * np.eye(len(GRID)), size=n_draws) \
+    s, trend = gp.sc.scale_[0], gp.lr.predict(trend_of(Xg)) if gp.trend else 0
+    draws = np.random.default_rng(rng).multivariate_normal(mean_s, cov_s + 1e-9 * np.eye(len(GRID)), size=n_draws) \
             * s + gp.sc.mean_[0] + trend
     t_opt = GRID[draws.argmin(axis=1) if best == "min" else draws.argmax(axis=1)]
     mu = mean_s * s + gp.sc.mean_[0] + trend; sd = np.sqrt(np.clip(np.diag(cov_s), 0, None)) * s

@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite the article and this software."
+title: "CO2 backfill ML: Gaussian process models for the optimal CO2 injection time in gold tailings cement paste backfill"
+type: software
+version: "0.1.0"
+date-released: "2026-11-10"
+license: MIT
+repository-code: "https://github.com/abbaszaynn/CO2-backfill-ML"
+authors:
+  - family-names: Abbas
+    given-names: Zayn
+  - family-names: Hussain
+    given-names: Zahid
+references:
+  - type: article
+    title: "CO2 injection stirring through slurry to enhance performance of gold tailings based sustainable cement paste backfill"
+    authors:
+      - family-names: Hussain
+        given-names: Zahid
+      - family-names: Fu
+        given-names: Jianxin
+      - family-names: Li
+        given-names: Jiajie
+      - family-names: Li
+        given-names: Yan
+    journal: "Journal of Cleaner Production"
+    volume: 518
+    start: 145950
+    year: 2025
+    doi: "10.1016/j.jclepro.2025.145950"

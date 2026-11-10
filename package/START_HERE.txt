@@ -39,4 +39,4 @@ These are preliminary results. The training data were derived from the published
 results, not raw lab data, and the 95% ranges are too narrow (they held 63-77% of test
 points, not 95%).
 
-Questions or problems: contact Zayn (abbaszayn827@gmail.com).
+Questions or problems: contact Zayn.
