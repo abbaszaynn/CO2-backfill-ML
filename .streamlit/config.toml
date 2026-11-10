@@ -1,0 +1,11 @@
+# Works offline / behind restricted networks: no usage statistics, no external services.
+[browser]
+gatherUsageStats = false
+
+[server]
+headless = true
+address = "localhost"      # only this computer can open the app; Docker overrides this
+maxUploadSize = 20
+
+[client]
+toolbarMode = "minimal"

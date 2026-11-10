@@ -1,0 +1,42 @@
+CO2 BACKFILL PREDICTOR - HOW TO START
+=====================================
+
+The app runs on your own computer, in your web browser. Nothing is sent to the internet,
+and your data stays on your computer.
+
+ONE-TIME SETUP (about 10 minutes)
+1. Unzip this folder somewhere easy to find, for example the Desktop.
+2. If Python is not installed yet: install Python 3.12 from https://www.python.org/downloads/
+   On Windows, tick "Add python.exe to PATH" on the first screen of the installer.
+3. Double-click the start file:
+     Windows: "Start app (Windows).bat"
+     Mac:     "Start app (Mac).command"
+              (if the Mac says it cannot open it: right-click the file, choose Open, then Open again)
+   The first time, it installs what it needs (5-10 minutes, needs internet).
+
+EVERY TIME AFTER THAT
+Double-click the same start file. The app opens in your browser at http://localhost:8501.
+The first page takes about 1 minute while the models train. Keep the black window open
+while you use the app; close it to stop the app.
+
+WHAT THE APP DOES
+Set the mix on the left (CO2 time, cement : tailings ratio, stirring speed, CO2 flow, curing age).
+  Predict ............ predicted porosity with a 95% range, and the best CO2 injection time.
+  Compare models ..... the 8 machine-learning models side by side.
+  Check new lab data . type or upload new lab results and see how close the model was.
+  Retrain (optional) . add your new results to the model and see whether it improves.
+                       The original data file is never changed.
+  Next tests ......... the CO2 times we suggest testing next: 6, 7, 9, 11, 12 and 13 min.
+  About and limits ... what the data and model are, and their limits.
+Every table has a "Download (CSV)" button.
+
+SENDING NEW LAB RESULTS
+In "Check new lab data", click "Download a blank template (CSV)", fill in the last column
+(porosity_pct) in Excel, save as CSV, and upload it. Please also send the file to Zayn.
+
+PLEASE NOTE
+These are preliminary results. The training data were derived from the published JCP 2025
+results, not raw lab data, and the 95% ranges are too narrow (they held 63-77% of test
+points, not 95%).
+
+Questions or problems: contact Zayn (abbaszayn827@gmail.com).

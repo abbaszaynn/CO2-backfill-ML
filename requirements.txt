@@ -1,0 +1,10 @@
+# Versions tested with Python 3.11 (Nov 2026)
+streamlit==1.67.0
+altair==6.3.0
+pandas==3.1.1
+numpy==2.4.6
+scikit-learn==1.9.1
+scipy==1.17.1
+# CPU-only XGBoost on Linux (avoids a 200 MB GPU library); the normal package elsewhere
+xgboost-cpu==3.2.0; sys_platform == "linux"
+xgboost==3.2.0; sys_platform != "linux"

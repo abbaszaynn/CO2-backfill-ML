@@ -1,0 +1,16 @@
+# Ignore everything by default, then publish only the files listed below
+*
+!.gitignore
+!README.md
+!app.py
+!backfill_model.py
+!CO2_backfill_ML_Colab.ipynb
+!co2_backfill_train.csv
+!requirements.txt
+!Dockerfile
+!.dockerignore
+!make_package.py
+!.streamlit/
+!.streamlit/config.toml
+!package/
+!package/*

@@ -1,0 +1,6 @@
+*
+!app.py
+!backfill_model.py
+!co2_backfill_train.csv
+!requirements.txt
+!.streamlit
